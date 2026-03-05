@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import DashboardView   from '../views/DashboardView.vue'
 import MessagesView    from '../views/MessagesView.vue'
 import MessageTypeView from '../views/MessageTypeView.vue'
@@ -28,6 +28,6 @@ const routes = [
 ]
 
 export default createRouter({
-  history: createWebHistory(),
+  history: import.meta.env.VITE_MOCK === 'true' ? createWebHashHistory() : createWebHistory(),
   routes,
 })

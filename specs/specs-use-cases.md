@@ -109,11 +109,11 @@ Le rejeu consiste simplement à :
 ### 3.1 Stack Technique
 
 #### Backend
-- **Framework** : Quarkus (choix retenu pour expérimentation sur projet non critique)
+- **Framework** : Spring Boot
 - **Langage** : Java
 - **API** : REST (exposition via OpenAPI)
-- **Accès données** : JdbcTemplate ou équivalent Quarkus
-- **Pool de connexions** : HikariCP ou Agroal (natif Quarkus)
+- **Accès données** : Spring data
+- **Pool de connexions** : HikariCP
 
 #### Frontend
 - **Framework** : Vue.js 3
@@ -122,7 +122,7 @@ Le rejeu consiste simplement à :
 
 #### Déploiement
 - **Platform** : OpenShift
-- **Containerisation** : Docker (image native Quarkus)
+- **Containerisation** : Docker
 - **Configuration** : ConfigMap / Secrets Kubernetes
 
 ### 3.2 Gestion des Datasources
@@ -203,7 +203,7 @@ Le champ `role` indique quelles tables sont présentes sur cette datasource :
 ### 3.4 Stratégie de Requêtage
 
 #### Vue d'ensemble (toutes les applications)
-- Exécution parallèle via CompletableFuture ou mécanismes reactifs Quarkus
+- Exécution parallèle via CompletableFuture ou mécanismes reactifs
 - Timeout global : 15-20s
 - Timeout par datasource : 5s
 - Gestion gracieuse des erreurs : si une base ne répond pas, renvoyer "N/A" pour cette app
@@ -434,19 +434,7 @@ Le champ `role` indique quelles tables sont présentes sur cette datasource :
 
 ## 6. Choix Technologiques et Justifications
 
-### 6.1 Quarkus vs Spring
-
-**Choix retenu** : Quarkus
-
-**Justifications** :
-- Application neuve (pas de migration legacy)
-- Gestion native de multiples datasources
-- Démarrage rapide crucial avec 20 connexions DB
-- Empreinte mémoire réduite pour OpenShift
-- Opportunité d'apprentissage sur projet non critique
-- Support natif du mode reactive si besoin ultérieur
-
-### 6.2 Polling vs WebSocket (Phase 1)
+### 6.1 Polling vs WebSocket (Phase 1)
 
 **Choix retenu** : Polling avec auto-refresh
 
@@ -458,7 +446,7 @@ Le champ `role` indique quelles tables sont présentes sur cette datasource :
 
 **Évolution prévue** : WebSocket en phase 2 si nécessaire
 
-### 6.3 Affichage Metadata vs Payload
+### 6.2 Affichage Metadata vs Payload
 
 **Choix retenu** : Métadonnées uniquement
 

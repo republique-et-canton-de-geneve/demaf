@@ -5,11 +5,11 @@
 ### 1 Stack Technique
 
 #### Backend
-- **Framework** : Quarkus (choix retenu pour expérimentation sur projet non critique)
+- **Framework** : Spring Boot
 - **Langage** : Java
 - **API** : REST (exposition via OpenAPI)
-- **Accès données** : JdbcTemplate ou équivalent Quarkus
-- **Pool de connexions** : HikariCP ou Agroal (natif Quarkus)
+- **Accès données** : Hibernate / Spring data
+- **Pool de connexions** : HikariCP
 
 #### Frontend
 - **Framework** : Vue.js 3
@@ -18,7 +18,7 @@
 
 #### Déploiement
 - **Platform** : OpenShift
-- **Containerisation** : Docker (image native Quarkus)
+- **Containerisation** : Docker
 - **Configuration** : ConfigMap / Secrets Kubernetes
 
 ### 2 Schéma des Tables
@@ -204,7 +204,7 @@ Le champ `role` indique quelles tables sont présentes sur cette datasource :
 ### 6 Stratégie de Requêtage
 
 #### Vue d'ensemble (toutes les applications)
-- Exécution parallèle via CompletableFuture ou mécanismes reactifs Quarkus
+- Exécution parallèle via CompletableFuture
 - Timeout global : 15-20s
 - Timeout par datasource : 5s
 - Gestion gracieuse des erreurs : si une base ne répond pas, renvoyer "N/A" pour cette app
