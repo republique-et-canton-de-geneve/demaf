@@ -4,7 +4,7 @@
     <div class="d-flex align-center mb-4 flex-wrap ga-3">
       <div class="flex-grow-1">
         <div class="text-h5 font-weight-bold">Tableau de bord</div>
-        <div class="text-caption text-medium-emphasis">Supervision des flux asynchrones inbox / outbox</div>
+        <div class="text-caption text-medium-emphasis">Supervision des flux asynchrones</div>
       </div>
 
       <AutoRefreshControl :interval-sec="10" @refresh="load"/>

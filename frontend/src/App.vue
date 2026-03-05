@@ -5,7 +5,7 @@
         <router-link to="/" class="text-white text-decoration-none font-weight-bold">
           DEMAF
         </router-link>
-        <span class="text-caption ml-2 opacity-70">Supervision des flux asynchrones</span>
+        <span class="text-caption ml-2 opacity-70">Domain Event Message Async Flow</span>
       </v-app-bar-title>
       <template #append>
         <v-chip size="small" color="white" variant="tonal" class="mr-4">
