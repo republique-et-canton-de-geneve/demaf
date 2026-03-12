@@ -1,4 +1,4 @@
-# DEMAF — Dashboard d'exploitation Inbox/Outbox
+# DEMAF — Domain Event Messages Async Flow
 
 DEMAF est un outil interne permettant aux équipes d'exploitation de surveiller et d'administrer les files de messages asynchrones (pattern inbox/outbox) réparties sur l'ensemble du SI.
 
