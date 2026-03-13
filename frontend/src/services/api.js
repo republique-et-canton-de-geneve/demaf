@@ -25,60 +25,49 @@ async function postJSON(url, body) {
   return res.json()
 }
 
-// ── Applications ──────────────────────────────────────────────────────────────
-export function fetchApplications() {
-  return fetchJSON(`${BASE}/applications`)
-}
-
 // ── Summary ───────────────────────────────────────────────────────────────────
-export function fetchSummary(application = null) {
-  const q = application ? `?application=${encodeURIComponent(application)}` : ''
-  return fetchJSON(`${BASE}/inbox-outbox/summary${q}`)
+// Retourne { role, inbox: StatusCounts | null, outbox: StatusCounts | null }
+export function fetchSummary() {
+  return fetchJSON(`${BASE}/summary`)
 }
 
-// ── Types de messages (vue globale) ───────────────────────────────────────────
-// Retourne [{ type, A_TRAITER, EN_TRAITEMENT, TRAITE, EN_ERREUR }]
-export function fetchMessageTypesSummary() {
-  return fetchJSON(`${BASE}/inbox-outbox/message-types/summary`)
-}
-
-// Retourne { type, partialData, producers: [...], consumers: [...] }
-export function fetchMessageTypeSummary(type) {
-  return fetchJSON(`${BASE}/inbox-outbox/message-types/${encodeURIComponent(type)}/summary`)
+// ── Types de messages ─────────────────────────────────────────────────────────
+// Retourne { role, types: string[] }
+export function fetchMessageTypes() {
+  return fetchJSON(`${BASE}/message-types`)
 }
 
 // ── Messages ──────────────────────────────────────────────────────────────────
-// Retourne { types: string[], role: 'both'|'producer'|'consumer' }
-export function fetchMessageTypes(appName) {
-  return fetchJSON(`${BASE}/inbox-outbox/applications/${encodeURIComponent(appName)}/message-types`)
-}
-
-export function fetchMessages(appName, { statuses = [], direction, types = [], page = 1, pageSize = 50 } = {}) {
+export function fetchMessages({ statuses = [], direction, types = [], page = 0, pageSize = 50 } = {}) {
   const params = new URLSearchParams()
-  for (const s of statuses) params.append('statuses', s) // multi-valeur : &statuses=A&statuses=B
-  if (direction)     params.set('direction', direction)
-  for (const t of types) params.append('types', t)
+  for (const s of (statuses ?? [])) params.append('statuses', s)
+  if (direction)                     params.set('direction', direction)
+  for (const t of (types ?? []))     params.append('types', t)
   params.set('page', String(page))
   params.set('pageSize', String(pageSize))
-  return fetchJSON(`${BASE}/inbox-outbox/applications/${encodeURIComponent(appName)}/messages?${params}`)
+  return fetchJSON(`${BASE}/messages?${params}`)
 }
 
-export function fetchMessage(appName, id) {
-  return fetchJSON(`${BASE}/inbox-outbox/applications/${encodeURIComponent(appName)}/messages/${id}`)
+export function fetchMessage(id) {
+  return fetchJSON(`${BASE}/messages/${id}`)
 }
 
 // ── Replay ────────────────────────────────────────────────────────────────────
-export function replaySingle(appName, id) {
-  return postJSON(`${BASE}/inbox-outbox/applications/${encodeURIComponent(appName)}/messages/${id}/replay`)
+export function replaySingle(id) {
+  return postJSON(`${BASE}/messages/${id}/replay`)
 }
 
-export function replayBatch(appName, ids) {
-  return postJSON(`${BASE}/inbox-outbox/applications/${encodeURIComponent(appName)}/messages/replay`, { ids })
+export function replayBatch(ids) {
+  return postJSON(`${BASE}/messages/replay`, { ids })
 }
 
-export function replayByFilter(appName, { statuses, types } = {}) {
+export function replayByFilter({ direction, statuses, types } = {}) {
   return postJSON(
-    `${BASE}/inbox-outbox/applications/${encodeURIComponent(appName)}/messages/replay-by-filter`,
-    { statuses: statuses?.length ? statuses : null, types: types?.length ? types : null },
+    `${BASE}/messages/replay-by-filter`,
+    {
+      direction:  direction  ?? null,
+      statuses:   statuses?.length  ? statuses  : null,
+      types:      types?.length     ? types     : null,
+    },
   )
 }

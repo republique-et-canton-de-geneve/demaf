@@ -9,8 +9,8 @@ import router from './router/index.js'
 import App from './App.vue'
 
 async function bootstrap() {
-  // Démarrage MSW en développement ou en mode pages (build mocké)
-  if (import.meta.env.DEV || import.meta.env.VITE_MOCK === 'true') {
+  // Démarrage MSW uniquement si explicitement activé
+  if (import.meta.env.VITE_MOCK === 'true') {
     const { worker } = await import('./mocks/browser.js')
     await worker.start({
       onUnhandledRequest: 'bypass',

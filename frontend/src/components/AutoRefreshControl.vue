@@ -1,14 +1,23 @@
 <template>
-  <v-chip
-    :color="paused ? 'grey' : 'success'"
-    variant="tonal"
-    size="small"
-    class="mr-2 cursor-pointer"
-    @click="toggle"
-  >
-    <v-icon start :icon="paused ? 'mdi-pause-circle' : 'mdi-refresh'"/>
-    {{ paused ? 'Auto-refresh pausé' : `Auto-refresh ${intervalSec}s` }}
-  </v-chip>
+  <div class="d-flex align-center ga-2">
+    <v-btn
+      icon="mdi-refresh"
+      size="small"
+      variant="text"
+      title="Rafraîchir"
+      @click="emit('refresh')"
+    />
+    <v-chip
+      :color="paused ? 'grey' : 'success'"
+      variant="tonal"
+      size="small"
+      class="cursor-pointer"
+      @click="toggle"
+    >
+      <v-icon start :icon="paused ? 'mdi-pause-circle' : 'mdi-sync'"/>
+      {{ paused ? 'Auto-refresh pausé' : `Auto-refresh ${intervalSec}s` }}
+    </v-chip>
+  </div>
 </template>
 
 <script setup>
@@ -20,7 +29,7 @@ const props = defineProps({
 
 const emit = defineEmits(['refresh'])
 
-const paused = ref(false)
+const paused = ref(true)
 let timer = null
 
 function startTimer() {

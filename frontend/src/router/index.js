@@ -1,29 +1,16 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
-import DashboardView   from '../views/DashboardView.vue'
-import MessagesView    from '../views/MessagesView.vue'
-import MessageTypeView from '../views/MessageTypeView.vue'
+import MessagesView  from '../views/MessagesView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'dashboard',
-    component: DashboardView,
-  },
-  {
-    path: '/applications/:appName/messages',
     name: 'messages',
     component: MessagesView,
     props: route => ({
-      appName:       route.params.appName,
-      initialStatus: route.query.status ?? null,
-      initialType:   route.query.type   ?? null,
+      initialStatus:    route.query.status    ?? null,
+      initialType:      route.query.type      ?? null,
+      initialDirection: route.query.direction ?? null,
     }),
-  },
-  {
-    path: '/message-types/:type',
-    name: 'message-type-detail',
-    component: MessageTypeView,
-    props: route => ({ type: route.params.type }),
   },
 ]
 

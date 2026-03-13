@@ -33,22 +33,6 @@
           </tbody>
         </v-table>
 
-        <!-- Payload -->
-        <div class="text-caption text-medium-emphasis mb-1">Payload</div>
-        <v-sheet class="pa-3 rounded bg-grey-darken-4 mb-4" style="font-family:monospace;font-size:12px;white-space:pre-wrap;">{{ JSON.stringify(message.payload, null, 2) }}</v-sheet>
-
-        <!-- Message d'erreur -->
-        <v-alert
-          v-if="message.errorMessage"
-          type="error"
-          variant="tonal"
-          density="compact"
-          class="mb-4"
-          title="Erreur"
-        >
-          <div class="text-caption" style="font-family:monospace">{{ message.errorMessage }}</div>
-        </v-alert>
-
         <!-- Note V1 -->
         <v-alert type="info" variant="tonal" density="compact" class="mb-4" icon="mdi-information">
           <span class="text-caption">Message d'erreur brut : non disponible en V1</span>
@@ -115,15 +99,13 @@ const metaRows = computed(() => {
   if (!props.message) return []
   const m = props.message
   return [
-    { label: 'Application',    value: m.application },
-    { label: 'Direction',      value: m.direction },
-    { label: 'Type',           value: m.type },
-    { label: 'Utilisateur',    value: m.utilisateur },
-    { label: 'Horodatage',     value: new Date(m.timestamp).toLocaleString('fr-FR') },
-    { label: 'Nb rejeux',      value: m.nbRejeux },
-    { label: 'Correlation ID', value: m.correlationId },
-    { label: 'Source',         value: m.sourceSystem },
-    { label: 'Cible',          value: m.targetSystem },
+    { label: 'Direction',   value: m.direction },
+    { label: 'Type',        value: m.type },
+    { label: 'Utilisateur', value: m.utilisateur },
+    { label: 'Horodatage',  value: new Date(m.timestamp).toLocaleString('fr-FR') },
+    { label: 'Nb rejeux',   value: m.nbRejeux },
+    ...(m.nbTentativesEnvoi != null ? [{ label: 'Tentatives envoi', value: m.nbTentativesEnvoi }] : []),
+    ...(m.datePublication   ? [{ label: 'Date publication',  value: new Date(m.datePublication).toLocaleString('fr-FR') }] : []),
   ]
 })
 
@@ -131,7 +113,7 @@ async function doReplay() {
   if (!props.message) return
   replaying.value = true
   try {
-    const updated = await replaySingle(props.message.application, props.message.id)
+    const updated = await replaySingle(props.message.id)
     emit('replayed', updated)
     confirmDialog.value = false
     model.value = false
